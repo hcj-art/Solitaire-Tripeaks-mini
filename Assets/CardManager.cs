@@ -45,11 +45,11 @@ public class CardManager : MonoBehaviour
             // 正常排布就是 anchoredPosition
             Vector2 targetLocalPos = rt.anchoredPosition;
             float xOff = Random.Range(-xScatter, xScatter);
-            // 从下方飞入
+            // 从下方飞入：起始位置 = 卡片的目标位置 + (水平随机偏移, 从屏幕底部再向下的固定偏移)
             Vector2 fromLocal = targetLocalPos + new Vector2(xOff, -canvasSize.y / 2 - yPad);
-
+            //触发卡牌入场飞行动画（从fromLocal飞到targetLocalPos，根据idx设置延迟达到依次飞入的效果）
             logic.view.FlyInFrom(fromLocal, targetLocalPos, idx * interval);
-
+            //延迟设计
             idx++;
         }
     }

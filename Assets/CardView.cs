@@ -32,21 +32,21 @@ public class CardView : MonoBehaviour, IPointerClickHandler
         ShowBack();
         rectTransform.localRotation = Quaternion.identity;
     }
-
+    //入场飞行动画（起始位置，目标位置，动画开始延迟时间：开始设置为0）
     public void FlyInFrom(Vector2 fromLocal, Vector2 toLocal, float delay = 0f)
     {
         if (isAnimating) return;
         isAnimating = true;
-        rectTransform.anchoredPosition = fromLocal;
+        rectTransform.anchoredPosition = fromLocal;//先将卡牌放在起始位置
         rectTransform.localRotation = Quaternion.identity;
-        rectTransform.localScale = Vector3.one;
-        rectTransform.SetAsLastSibling(); // 确保动画遮挡正确
+        rectTransform.localScale = Vector3.one;//（1，1，1）
+        rectTransform.SetAsLastSibling(); // 确保动画遮挡正确，显示在最上层
     
         // 动画
         Sequence seq = DOTween.Sequence();
-        seq.AppendInterval(delay); // 错开更自然
-        seq.Append(rectTransform.DOAnchorPos(toLocal, 0.5f).SetEase(Ease.OutQuad));
-        seq.Join(rectTransform.DOScale(scaleSize, 0.25f).SetLoops(2, LoopType.Yoyo)); // 先放大弹一下
+        seq.AppendInterval(delay); // 错开更自然，延迟飞入
+        seq.Append(rectTransform.DOAnchorPos(toLocal, 0.5f).SetEase(Ease.OutQuad));//0.5s移动至该位置
+        seq.Join(rectTransform.DOScale(scaleSize, 0.25f).SetLoops(2, LoopType.Yoyo)); // 同步进行放缩动画
         seq.AppendCallback(() =>
         {
             isAnimating = false;
