@@ -180,4 +180,23 @@ public class TargetPileManager : MonoBehaviour
             PlayedAreaManager.Instance.RefreshOrder();
         });
     }
+    //可匹配牌未被点击，发出提醒
+    public void HintPlayableTargetCards()
+    {
+        int playedTopNumber = PlayedAreaManager.Instance.GetTopCardNumber();
+
+        foreach (var logic in allDict.Values)
+        {
+            if (logic == null || logic.view == null || logic.view.IsPlayed()) continue;
+            if (!IsCardFree(logic.instanceId)) continue;
+
+            // 只匹配数字（不考虑WILD，WILD在你判定里已return true），但你一般手动点WILD
+            if (IsCardNumberCanMatch(logic.cardNumber, playedTopNumber)
+                && logic.cardNumber != 0) // 排除WILD牌自己，不提醒WILD
+            {
+                logic.view.PlayHintAnim();
+            }
+        }
+    }
+
 }

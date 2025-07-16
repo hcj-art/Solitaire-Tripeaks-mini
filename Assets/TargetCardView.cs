@@ -132,6 +132,17 @@ public class TargetCardView : MonoBehaviour, IPointerClickHandler
             TargetPileManager.Instance.OnCardAnimationEnd(); //<-动画结束登记
         });
     }
+    //提醒动画：可点击未被点击
+    public void PlayHintAnim()
+    {
+        // 避免多次调用堆叠
+        rectTransform.DOKill();
+        Sequence seq = DOTween.Sequence();
+        seq.Append(rectTransform.DOScale(1.15f, 0.14f));          // 放大一点
+        seq.Append(rectTransform.DOShakeScale(0.25f, 0.24f));      // 晃动
+        seq.Append(rectTransform.DOScale(1f, 0.12f));              // 恢复
+    }
+
 
 }
 

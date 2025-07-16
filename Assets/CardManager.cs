@@ -97,14 +97,14 @@ public class CardManager : MonoBehaviour
     public void CardClicked(CardLogic logic)
     {
         Canvas canvas = logic.view.GetComponentInParent<Canvas>();
-    
+
         // 播放目标是playedCardAnchor，用它的position求全局坐标
         Vector3 worldTargetPos = playedCardAnchor.position;
 
         // 要获得“当前Parent坐标系下”该点的local位置
         Vector2 localTargetPos;
         RectTransform parentRect = logic.view.rectTransform.parent as RectTransform;
-    
+
         // 先转屏幕坐标
         Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(canvas.worldCamera, worldTargetPos);
 
@@ -124,5 +124,7 @@ public class CardManager : MonoBehaviour
             logic.view.rectTransform.anchoredPosition = Vector2.zero;
             PlayedAreaManager.Instance.RefreshOrder();
         });
+        //看看Target区域是否有可点击却未被点击的牌，发出提醒
+        TargetPileManager.Instance.HintPlayableTargetCards();
     }
 }
