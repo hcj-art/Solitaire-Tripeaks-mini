@@ -32,6 +32,7 @@ public class CardView : MonoBehaviour, IPointerClickHandler
         ShowBack();
         rectTransform.localRotation = Quaternion.identity;
     }
+
     //入场飞行动画（起始位置，目标位置，动画开始延迟时间：开始设置为0）
     public void FlyInFrom(Vector2 fromLocal, Vector2 toLocal, float delay = 0f)
     {
@@ -41,7 +42,7 @@ public class CardView : MonoBehaviour, IPointerClickHandler
         rectTransform.localRotation = Quaternion.identity;
         rectTransform.localScale = Vector3.one;//（1，1，1）
         rectTransform.SetAsLastSibling(); // 确保动画遮挡正确，显示在最上层
-    
+
         // 动画
         Sequence seq = DOTween.Sequence();
         seq.AppendInterval(delay); // 错开更自然，延迟飞入
@@ -51,7 +52,7 @@ public class CardView : MonoBehaviour, IPointerClickHandler
         {
             isAnimating = false;
         });
-}
+    }
 
 
     public void OnPointerClick(PointerEventData eventData)
@@ -72,7 +73,7 @@ public class CardView : MonoBehaviour, IPointerClickHandler
         seq.Join(rectTransform.DOScale(scaleSize, flyDuration));
         seq.Append(rectTransform.DOScale(1f, 0.2f));
         seq.AppendCallback(() =>
-        {  
+        {
             isAnimating = false;
             hasPlayed = true;
             onComplete?.Invoke();
@@ -93,5 +94,9 @@ public class CardView : MonoBehaviour, IPointerClickHandler
         isFront = true;
         front.SetActive(true);
         back.SetActive(false);
+    }
+    public bool IsFront()
+    {
+        return isFront;
     }
 }
