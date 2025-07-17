@@ -6,7 +6,7 @@ using TMPro;
 
 public class SkillManager : MonoBehaviour
 {
-    [Header("技能次数设置")]
+    [Header("撤销次数设置")]
     public int undoSkillRemain = 3; // 可用次数，Inspector设置
 
     [Header("连UI元素")]
@@ -24,10 +24,8 @@ public class SkillManager : MonoBehaviour
         if (undoSkillRemain <= 0)
             return;
         
-        // 撤销实际动作（这里调用UndoManager逻辑，举个例）
-        //UndoManager.Instance.UndoLastMove(() => {
-        //   TargetPileManager.Instance.RefreshCardFrontStatus();
-        //});
+        // 撤销实际动作（这里调用UndoManager逻辑）
+        UndoManager.Instance.UndoLastMove();
 
         undoSkillRemain--;
         RefreshUndoSkillUI();

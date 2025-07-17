@@ -170,6 +170,21 @@ public class TargetPileManager : MonoBehaviour
             out flyTargetLocal
         );
 
+        //记录Undo
+        UndoManager.UndoData data = new UndoManager.UndoData
+        {
+            cardLogic = logic,
+            cardView = logic.view,
+            origParent = logic.view.rectTransform.parent,
+            origSiblingIndex = logic.view.rectTransform.GetSiblingIndex(),
+            origAnchoredPos = logic.view.rectTransform.anchoredPosition,
+            origIsFront = logic.view.IsFront(),
+            origIsPlayed = logic.view.IsPlayed(),
+            fromZone = UndoManager.ZoneType.TargetPile,
+            affectedFaces = new List<UndoManager.AffectedFaceData>()
+        };
+        UndoManager.Instance.RecordPlay(data);
+
         // 2. 动画到目标local点，动画期间parent不能动
         logic.view.RotateAndFlyTo(flyTargetLocal, () =>
         {
@@ -198,5 +213,20 @@ public class TargetPileManager : MonoBehaviour
             }
         }
     }
+    //刷新全体牌，保证撤销后牌堆牌翻回背面
+    public void RefreshAllCardFaces()
+    {
+        foreach (var kvp in allDict)
+        {
+            var logic = kvp.Value;
+            if (logic == null || logic.view == null) continue;
+            if (logic.view.IsPlayed()) continue;
+            if (IsCardFree(logic.instanceId))
+                logic.view.SetFrontState(true);  // 立即翻到正面
+            else
+                logic.view.SetFrontState(false); // 立即翻到背面
+        }
+    }
+
 
 }

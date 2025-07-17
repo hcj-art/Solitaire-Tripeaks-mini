@@ -116,6 +116,21 @@ public class CardManager : MonoBehaviour
             out localTargetPos
         );
 
+        //记录Undo数据
+        UndoManager.UndoData data = new UndoManager.UndoData
+        {
+            cardLogic = logic,
+            cardView = logic.view,
+            origParent = logic.view.rectTransform.parent,
+            origSiblingIndex = logic.view.rectTransform.GetSiblingIndex(),
+            origAnchoredPos = logic.view.rectTransform.anchoredPosition,
+            origIsFront = logic.view.IsFront(),
+            origIsPlayed = logic.view.IsPlayed(),
+            fromZone = UndoManager.ZoneType.CardPile,
+            affectedFaces = new List<UndoManager.AffectedFaceData>()
+        };
+        UndoManager.Instance.RecordPlay(data);
+
         // 播放动画到该局部点
         logic.view.FlipAndFlyTo(localTargetPos, () =>
         {

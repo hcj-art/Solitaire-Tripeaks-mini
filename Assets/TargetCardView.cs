@@ -138,11 +138,24 @@ public class TargetCardView : MonoBehaviour, IPointerClickHandler
         // 避免多次调用堆叠
         rectTransform.DOKill();
         Sequence seq = DOTween.Sequence();
-        seq.Append(rectTransform.DOScale(1.15f, 0.14f));          // 放大一点
+        seq.Append(rectTransform.DOScale(1.15f, 0.2f));          // 放大一点
         seq.Append(rectTransform.DOShakeScale(0.25f, 0.24f));      // 晃动
-        seq.Append(rectTransform.DOScale(1f, 0.12f));              // 恢复
+        seq.Append(rectTransform.DOScale(1f, 0.2f));              // 恢复
     }
-
+    //新增：用于撤销——不带动画直接切牌面
+    public void SetFrontState(bool isFront)
+    {
+        this.isFront = isFront;
+        if (isFront)
+            ShowFront();
+        else
+            ShowBack();
+    }
+    // 用于撤销
+    public void SetPlayedState(bool played)
+    {
+        hasPlayed = played;
+    }
 
 }
 

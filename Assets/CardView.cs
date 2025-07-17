@@ -99,4 +99,20 @@ public class CardView : MonoBehaviour, IPointerClickHandler
     {
         return isFront;
     }
+
+    // 新增撤销功能（SetFrontState，撤销会用到）
+    public void SetFrontState(bool isFront)
+    {
+        this.isFront = isFront;
+
+        if (isFront)
+            ShowFront();
+        else
+            ShowBack();
+    }
+    // 用于撤销和判定恢复已出牌状态
+    public void SetPlayedState(bool played)
+    {
+        hasPlayed = played;
+    }
 }
