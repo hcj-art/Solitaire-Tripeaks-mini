@@ -221,12 +221,17 @@ public class TargetPileManager : MonoBehaviour
             var logic = kvp.Value;
             if (logic == null || logic.view == null) continue;
             if (logic.view.IsPlayed()) continue;
-            if (IsCardFree(logic.instanceId))
-                logic.view.SetFrontState(true);  // 立即翻到正面
+            bool shouldFront = IsCardFree(logic.instanceId);
+            if (shouldFront)
+            {
+                if (!logic.view.IsFront() && !logic.view.IsAnimating())
+                    logic.view.FlipToFront();
+            }
             else
-                logic.view.SetFrontState(false); // 立即翻到背面
-        }
+            {
+                if (logic.view.IsFront() && !logic.view.IsAnimating())
+                    logic.view.FlipToBack(); //用动画
+            }
     }
-
-
+    }
 }

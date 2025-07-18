@@ -55,23 +55,20 @@ public class UndoManager : MonoBehaviour
         if (!HasUndo) return;
         var data = undoStack.Pop();
 
-        //从出牌区移除
+        // 1. 从出牌区逻辑&管理移除
         PlayedAreaManager.Instance.RemoveCard(((MonoBehaviour)data.cardLogic).transform);
 
-        //放回原区域
+        // 2. 放回原区域，设置父对象、层级、位置信息（都先同步数据和层级）
         Transform cardTrans = ((MonoBehaviour)data.cardLogic).transform;
-        cardTrans.SetParent(data.origParent, false);
-
-        //恢复父对象以及层级
+        cardTrans.SetParent(data.origParent, false); // 只改父对象
         cardTrans.SetSiblingIndex(data.origSiblingIndex);
 
-        //恢复局部位置
         RectTransform rt = cardTrans.GetComponent<RectTransform>();
-        rt.anchoredPosition = data.origAnchoredPos;
+        //rt.anchoredPosition = data.origAnchoredPos; // 位置信息也同步回撤销前，会导致没有动画
 
-        //恢复正反面及已出牌（只通过 view）
+        // 3. 恢复自身正反面、已出牌状态
         if (data.cardLogic is CardLogic cl)
-        {
+        {  
             cl.view.SetFrontState(data.origIsFront);
             cl.view.SetPlayedState(data.origIsPlayed);
             CardManager.Instance.allDict[cl.instanceId] = cl;
@@ -83,7 +80,7 @@ public class UndoManager : MonoBehaviour
             TargetPileManager.Instance.allDict[tcl.instanceId] = tcl;
         }
 
-        //只用 SetFrontState 恢复正反面
+        // 4. 恢复（受影响的）其它牌的正反面
         foreach (var aff in data.affectedFaces)
         {
             if (aff.logic is CardLogic ac)
@@ -96,16 +93,31 @@ public class UndoManager : MonoBehaviour
             }
         }
 
-        //刷新字典层级
-        if (data.fromZone == ZoneType.CardPile)
+        // 5. 动画处理
+        // 判断是否是TargetPile区的卡，需飞回动画
+        if (data.cardLogic is TargetCardLogic aniTcl && data.origParent == TargetPileManager.Instance.cardRoot)
         {
-            CardManager.Instance.allDict[((CardLogic)data.cardLogic).instanceId] = (CardLogic)data.cardLogic;
+            TargetCardView view = aniTcl.view;
+            // 此时，牌已经SetParent到目标区，直接请求动画表现即可
+            view.FlyBackTo(
+                data.origParent,
+                data.origSiblingIndex,
+                data.origAnchoredPos,
+                () =>
+                {
+                    // 动画播完可以再保险地刷新一次正反面与状态
+                    view.SetFrontState(data.origIsFront);
+                    view.SetPlayedState(data.origIsPlayed);
+                    TargetPileManager.Instance.RefreshAllCardFaces();
+                });
         }
-        else if (data.fromZone == ZoneType.TargetPile)
+        else
         {
-            //把被撤销操作的那张 TargetPile 区的牌（TargetCardLogic）放回到 TargetPileManager 的 allDict 字典里，索引是 instanceId。
-            TargetPileManager.Instance.allDict[((TargetCardLogic)data.cardLogic).instanceId] = (TargetCardLogic)data.cardLogic;
-            TargetPileManager.Instance.RefreshAllCardFaces();
+            // 不是TargetPile区，用普通的刷新
+            if (data.fromZone == ZoneType.CardPile)
+            {
+                CardManager.Instance.allDict[((CardLogic)data.cardLogic).instanceId] = (CardLogic)data.cardLogic;
+            }
         }
     }
 }

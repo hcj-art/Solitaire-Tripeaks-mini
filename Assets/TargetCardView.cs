@@ -11,7 +11,7 @@ public class TargetCardView : MonoBehaviour, IPointerClickHandler
     public GameObject back;
     [Header("动画参数")]
     public float rotateDuration = 0.5f;
-    public float flyDuration = 0.5f;
+    public float flyDuration = 0.8f;
     public float scaleSize = 1.2f;
     public float flipDuration = 0.3f;
     private bool isFront = false;
@@ -155,6 +155,47 @@ public class TargetCardView : MonoBehaviour, IPointerClickHandler
     public void SetPlayedState(bool played)
     {
         hasPlayed = played;
+    }
+    //撤销后飞回动画
+    public void FlyBackTo(Transform targetParent, int siblingIndex, Vector2 targetAnchoredPos, System.Action onFinish = null)
+    {
+        if (isAnimating) return;
+        isAnimating = true;
+        TargetPileManager.Instance.OnCardAnimationStart();
+
+        //父节点外面已经SetParent了，不能动了
+        //rectTransform.SetParent(targetParent, false);
+
+        Sequence seq = DOTween.Sequence();
+        //缓动类型：Easing, Ease.OutQuad =>先快后慢 ｜Ease.Linear =>匀速运动 ｜ Ease.InQuad =>先慢后快 ｜ Ease.InOutQuad =>先加速后减速
+        seq.Append(rectTransform.DOAnchorPos(targetAnchoredPos, flyDuration).SetEase(Ease.OutQuad));
+        seq.Join(rectTransform.DOScale(1.0f, flyDuration));
+        seq.OnComplete(() =>
+        {
+            rectTransform.SetSiblingIndex(siblingIndex);
+            isAnimating = false;
+            TargetPileManager.Instance.OnCardAnimationEnd();
+            onFinish?.Invoke();
+        });
+    }
+    //撤销后Target Pile自动翻回背面动画
+    public void FlipToBack(System.Action onComplete = null)
+    {
+        if (isAnimating || !isFront) return;
+        isAnimating = true;
+        TargetPileManager.Instance.OnCardAnimationStart();
+        Sequence seq = DOTween.Sequence();
+        seq.Append(transform.DOLocalRotate(new Vector3(0, 90, 0), flipDuration / 2))
+            .AppendCallback(() => ShowBack())
+            .Append(transform.DOLocalRotate(new Vector3(0, 0, 0), flipDuration / 2))
+            .OnComplete(() =>
+            {
+                isAnimating = false;
+                isFront = false;
+                onComplete?.Invoke();
+                TargetPileManager.Instance.OnCardAnimationEnd();
+            });
+
     }
 
 }
