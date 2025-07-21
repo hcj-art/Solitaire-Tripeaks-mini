@@ -55,10 +55,31 @@ public class GameEndManager : MonoBehaviour
         }
         //失败条件：手牌区全部打完且Target区仍有余牌
         else if (cardPileAllGone)
+    {
+        int playedTop = PlayedAreaManager.Instance.GetTopCardNumber();
+        bool canMatchAny = false;
+
+        foreach (var kvp in TargetPileManager.Instance.allDict)
+        {
+            var logic = kvp.Value;
+            if (logic == null || logic.view == null) continue;
+            bool isTargetWild = logic.isTargetWild;
+            bool isNormalTarget = (!logic.isWild && !logic.isTargetWild);
+            if (!(isTargetWild || isNormalTarget)) continue; // 只判目标目标
+            if (logic.view.IsPlayed()) continue;
+            if (!TargetPileManager.Instance.IsCardFree(logic.instanceId)) continue;
+            if (TargetPileManager.Instance.IsCardNumberCanMatch(logic.cardNumber, playedTop))
+            {
+                canMatchAny = true;
+                break;
+            }
+        }
+        if (!canMatchAny)
         {
             gameOver = true;
             ShowResultPanel(false);
         }
+    }
     }
     void ShowResultPanel(bool win)
     {

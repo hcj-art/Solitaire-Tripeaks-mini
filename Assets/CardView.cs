@@ -25,10 +25,9 @@ public class CardView : MonoBehaviour, IPointerClickHandler
             logic = GetComponent<CardLogic>();
         if (logic != null && logic.view != this)
             logic.view = this;
-    }
-    void Start()
-    {
-        rectTransform = GetComponent<RectTransform>();
+
+        if(rectTransform == null)
+            rectTransform = GetComponent<RectTransform>();
         ShowBack();
         rectTransform.localRotation = Quaternion.identity;
     }

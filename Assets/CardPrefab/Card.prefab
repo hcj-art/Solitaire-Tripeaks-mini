@@ -94,10 +94,10 @@ MonoBehaviour:
   logic: {fileID: 0}
   front: {fileID: 1737851443803103518}
   back: {fileID: 3100275857946936580}
-  targetRectPosition: {fileID: 0}
   flipDuration: 0.25
   flyDuration: 0.5
   scaleSize: 1.2
+  rectTransform: {fileID: 0}
 --- !u!114 &-6100245485948648760
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110,8 +110,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9db199e3de9334b16a70de5cf65c43bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numberValue: 0
-  instanceId: 0
+  cardNumber: 6
+  instanceId: 4
   view: {fileID: 0}
 --- !u!1 &1737851443803103518
 GameObject:
@@ -178,7 +178,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: b710f404119934478b6b479d846852a1, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6d4bba835c25846159a5645073153779, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
