@@ -193,6 +193,9 @@ public class TargetPileManager : MonoBehaviour
             logic.view.rectTransform.anchoredPosition = Vector2.zero;
             PlayedAreaManager.Instance.AddCard(logic.transform);
             PlayedAreaManager.Instance.RefreshOrder();
+
+            // ★ 在这里胜负检查
+            GameEndManager.Instance.CheckWinOrLose();
         });
     }
     //可匹配牌未被点击，发出提醒

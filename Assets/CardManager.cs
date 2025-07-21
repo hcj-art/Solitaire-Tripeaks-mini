@@ -138,6 +138,9 @@ public class CardManager : MonoBehaviour
             PlayedAreaManager.Instance.AddCard(logic.transform); // 记得此处SetParent
             logic.view.rectTransform.anchoredPosition = Vector2.zero;
             PlayedAreaManager.Instance.RefreshOrder();
+
+            // 【关键：胜负判定】
+            GameEndManager.Instance.CheckWinOrLose();
         });
         //看看Target区域是否有可点击却未被点击的牌，发出提醒
         TargetPileManager.Instance.HintPlayableTargetCards();

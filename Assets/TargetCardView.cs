@@ -11,7 +11,7 @@ public class TargetCardView : MonoBehaviour, IPointerClickHandler
     public GameObject back;
     [Header("动画参数")]
     public float rotateDuration = 0.5f;
-    public float flyDuration = 0.8f;
+    public float flyDuration = 1.2f;
     public float scaleSize = 1.2f;
     public float flipDuration = 0.3f;
     private bool isFront = false;
