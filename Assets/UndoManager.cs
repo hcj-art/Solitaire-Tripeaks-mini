@@ -117,6 +117,9 @@ public class UndoManager : MonoBehaviour
             if (data.fromZone == ZoneType.CardPile)
             {
                 CardManager.Instance.allDict[((CardLogic)data.cardLogic).instanceId] = (CardLogic)data.cardLogic;
+                // 恢复位置
+                rt = ((MonoBehaviour)data.cardLogic).GetComponent<RectTransform>();
+                rt.anchoredPosition = data.origAnchoredPos;
             }
         }
     }
