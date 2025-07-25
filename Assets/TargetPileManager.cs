@@ -73,7 +73,7 @@ public class TargetPileManager : MonoBehaviour
             RectTransform rt = logic.view.rectTransform;
             Vector2 toLocal = rt.anchoredPosition; // 目标位置(铺好)
             float xOffset = Random.Range(-xScatter, xScatter);
-            Vector2 fromLocal = toLocal + new Vector2(xOffset, canvasSize.y / 2 + yPad);
+            Vector2 fromLocal = toLocal + new Vector2(xOffset, canvasSize.y / 1.5f + yPad);
 
             // 播放"飞入"动画
             logic.view.PlayEnterAnim(fromLocal, toLocal, idx * interval);
@@ -193,7 +193,8 @@ public class TargetPileManager : MonoBehaviour
             logic.view.rectTransform.anchoredPosition = Vector2.zero;
             PlayedAreaManager.Instance.AddCard(logic.transform);
             PlayedAreaManager.Instance.RefreshOrder();
-
+            // 4. 匹配成功，通知GameManager
+            GameManager.Instance.OnTargetPileMatch();
             // ★ 在这里胜负检查
             GameEndManager.Instance.CheckWinOrLose();
         });

@@ -11,7 +11,7 @@ public class ResultPanel : MonoBehaviour
     {
         gameObject.SetActive(true);           // 显示整个Panel
         winPanel.SetActive(win);              // 显示胜利内容/隐藏失败内容
-        losePanel.SetActive(!win);
+        losePanel.SetActive(!win);            // 显示失败内容/隐藏胜利内容
     }
 
     public void Hide()

@@ -33,6 +33,7 @@ public class TargetCardView : MonoBehaviour, IPointerClickHandler
         //rectTransform.localRotation = Quaternion.identity;
     }
 
+    //入场飞行动画
     public void PlayEnterAnim(Vector2 fromLocalPos, Vector2 toLocalPos, float delay = 0f)
     {
         rectTransform.anchoredPosition = fromLocalPos;
@@ -142,7 +143,7 @@ public class TargetCardView : MonoBehaviour, IPointerClickHandler
         seq.Append(rectTransform.DOShakeScale(0.25f, 0.24f));      // 晃动
         seq.Append(rectTransform.DOScale(1f, 0.2f));              // 恢复
     }
-    //新增：用于撤销——不带动画直接切牌面
+    //用于撤销——不带动画直接切牌面
     public void SetFrontState(bool isFront)
     {
         this.isFront = isFront;

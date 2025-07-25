@@ -65,7 +65,7 @@ public class GameEndManager : MonoBehaviour
             if (logic == null || logic.view == null) continue;
             bool isTargetWild = logic.isTargetWild;
             bool isNormalTarget = (!logic.isWild && !logic.isTargetWild);
-            if (!(isTargetWild || isNormalTarget)) continue; // 只判目标目标
+            if (!(isTargetWild || isNormalTarget)) continue; // 只判目标牌
             if (logic.view.IsPlayed()) continue;
             if (!TargetPileManager.Instance.IsCardFree(logic.instanceId)) continue;
             if (TargetPileManager.Instance.IsCardNumberCanMatch(logic.cardNumber, playedTop))

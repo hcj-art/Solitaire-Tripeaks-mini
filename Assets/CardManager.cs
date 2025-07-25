@@ -96,6 +96,8 @@ public class CardManager : MonoBehaviour
 
     public void CardClicked(CardLogic logic)
     {
+        GameManager.Instance.OnCardPileClick();
+
         Canvas canvas = logic.view.GetComponentInParent<Canvas>();
 
         // 播放目标是playedCardAnchor，用它的position求全局坐标

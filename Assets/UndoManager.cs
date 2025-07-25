@@ -64,7 +64,7 @@ public class UndoManager : MonoBehaviour
         cardTrans.SetSiblingIndex(data.origSiblingIndex);
 
         RectTransform rt = cardTrans.GetComponent<RectTransform>();
-        //rt.anchoredPosition = data.origAnchoredPos; // 位置信息也同步回撤销前，会导致没有动画
+        rt.anchoredPosition = data.origAnchoredPos; // 位置信息也同步回撤销前，会导致没有动画
 
         // 3. 恢复自身正反面、已出牌状态
         if (data.cardLogic is CardLogic cl)
@@ -118,8 +118,8 @@ public class UndoManager : MonoBehaviour
             {
                 CardManager.Instance.allDict[((CardLogic)data.cardLogic).instanceId] = (CardLogic)data.cardLogic;
                 // 恢复位置
-                rt = ((MonoBehaviour)data.cardLogic).GetComponent<RectTransform>();
-                rt.anchoredPosition = data.origAnchoredPos;
+                //rt = ((MonoBehaviour)data.cardLogic).GetComponent<RectTransform>();
+                //rt.anchoredPosition = data.origAnchoredPos;
             }
         }
     }
