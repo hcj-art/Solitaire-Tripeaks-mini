@@ -7,6 +7,12 @@ public class GameEndManager : MonoBehaviour
     public ResultPanel resultPanel;
     public static GameEndManager Instance { get; private set; }
     private bool gameOver = false;
+    
+    public void ResetGameEnd()//重置游戏结束状态
+    {
+        gameOver = false;
+    }
+
     private void Awake()
     {
         if (Instance == null)
@@ -52,6 +58,7 @@ public class GameEndManager : MonoBehaviour
         {
             gameOver = true;
             ShowResultPanel(true);
+            Debug.Log("代码运行到这里了，胜利！");
         }
         //失败条件：手牌区全部打完且Target区仍有余牌
         else if (cardPileAllGone)
@@ -78,6 +85,7 @@ public class GameEndManager : MonoBehaviour
             {
                 gameOver = true;
                 ShowResultPanel(false);
+                Debug.Log("代码运行到这里了！失败");
             }
         }
     }

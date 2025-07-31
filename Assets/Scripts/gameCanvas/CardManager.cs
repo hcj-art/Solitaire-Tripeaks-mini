@@ -17,6 +17,18 @@ public class CardManager : MonoBehaviour
     void Awake()
     {
         Instance = this;
+        if (canvas == null)
+        {
+            GameObject go = GameObject.Find("gameCanvas");
+            if (go != null)
+            {
+                canvas = go.GetComponent<Canvas>();
+            }
+            else
+            {
+                Debug.LogError("找不到名为gameCanvas的物体，请确认场景中有这个对象");
+            }
+        }
     }
 
     void Start()

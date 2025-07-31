@@ -10,6 +10,7 @@ public class MenuManager : MonoBehaviour
     public CanvasGroup helpPanel;
     public CanvasGroup menuCanvas;
     public CanvasGroup gameCanvas;
+    public GameManager gameManager;
     public float fadeDuration = 0.5f;
     void Start()
     {
@@ -21,7 +22,7 @@ public class MenuManager : MonoBehaviour
         // 先让 menuCanvas 渐隐、隐藏，再让 gameCanvas 渐现
         menuCanvas.DOFade(0, fadeDuration).OnComplete(() =>
         {
-            menuCanvas.interactable = menuCanvas.blocksRaycasts = false;
+            //menuCanvas.interactable = menuCanvas.blocksRaycasts = false;
             menuCanvas.gameObject.SetActive(false);
 
             gameCanvas.gameObject.SetActive(true);
@@ -29,6 +30,7 @@ public class MenuManager : MonoBehaviour
             gameCanvas.interactable = gameCanvas.blocksRaycasts = true;
             gameCanvas.DOFade(1, fadeDuration);
         });
+        gameManager.RestartGame(); // 重置游戏状态
     }
     public void OnSettingClicked()
     {
@@ -61,8 +63,12 @@ public class MenuManager : MonoBehaviour
         helpPanel.interactable = helpPanel.blocksRaycasts = (panel == helpPanel);
 
     }
+    //这里的from和to在隐藏和显示时会自己变换alpha的数据，不像上面的OnStartClicked()自己变不回去
+    //导致上面OnStartClicked()中点击start后，他的alpha自己变不回来
+    //有必要写一个方法专门修复这个问题，或者以后只改active状态，不修改alpha
     void SwitchPanel(CanvasGroup from, CanvasGroup to)
     {
+        //SwitchPanel之所以没问题，是因为它每次都开关配对，逻辑闭环。
         from.DOFade(0, fadeDuration).OnComplete(() =>
         {
             from.interactable = false;
