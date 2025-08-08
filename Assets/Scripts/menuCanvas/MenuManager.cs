@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class MenuManager : MonoBehaviour
 {
     //这是我的分支测试，为了体验代码拉取合并的过程，test以注释的形式去查看合并后的代码
+    //技术文档的分支测试，去观察分支和main的区别
     public CanvasGroup mainMenuPanel;
     public CanvasGroup settingsPanel;
     public CanvasGroup helpPanel;
