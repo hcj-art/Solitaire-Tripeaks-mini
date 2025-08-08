@@ -2082,6 +2082,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   winPanel: {fileID: 1525829665346538933}
   losePanel: {fileID: 2811976273573989101}
+  canvasGroup: {fileID: 0}
 --- !u!1 &5827348696089538206
 GameObject:
   m_ObjectHideFlags: 0

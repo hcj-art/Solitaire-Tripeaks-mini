@@ -10,6 +10,7 @@ public class TargetPileManager : MonoBehaviour
     public Canvas canvas;// 拖进你根Canvas
     public RectTransform playedCardAnchor;// 拖进你目标锚点（PlayedArea下的锚空物体RectTransform）
     public Dictionary<int, TargetCardLogic> allDict = new Dictionary<int, TargetCardLogic>();// 现场所有在牌堆里的牌，key为instanceId
+    private Button settingButton;// 预制体无法拖进设置按钮，只能查找
 
     //对于卡牌自动翻面，用所用动画判断结束后再进行翻面逻辑判断
     private int animatingCount = 0;
@@ -17,12 +18,18 @@ public class TargetPileManager : MonoBehaviour
     {
         animatingCount++;
         // Debug.Log("动画开始，当前animatingCount=" + animatingCount);
+        if (animatingCount == 1 && settingButton != null)
+            settingButton.interactable = false;// 禁用设置按钮，防止动画期间误操作
     }
     public void OnCardAnimationEnd()
     {
         animatingCount--;
         if (animatingCount < 0) animatingCount = 0; // 容错
         // Debug.Log("动画结束，当前animatingCount=" + animatingCount);
+
+        if (animatingCount == 0 && settingButton != null)
+            settingButton.interactable = true;
+
         if (animatingCount == 0)
         {
             TryFlipAllCanFlipCards();
@@ -61,6 +68,13 @@ public class TargetPileManager : MonoBehaviour
 
     void Start()
     {
+        // 初始化设置按钮
+        GameObject setBtnObj = GameObject.Find("Setting Button");
+        if (setBtnObj != null)
+            settingButton = setBtnObj.GetComponent<Button>();
+        else
+            Debug.LogError("找不到Setting Button对象，请确认场景UI中按钮正确命名");
+
         // 初始化收集
         var allCards = cardRoot.GetComponentsInChildren<TargetCardLogic>(true);
         allDict.Clear();
@@ -248,6 +262,6 @@ public class TargetPileManager : MonoBehaviour
                 if (logic.view.IsFront() && !logic.view.IsAnimating())
                     logic.view.FlipToBack(); //用动画
             }
-    }
+        }
     }
 }

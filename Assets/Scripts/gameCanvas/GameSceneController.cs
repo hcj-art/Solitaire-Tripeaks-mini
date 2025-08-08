@@ -7,10 +7,10 @@ public class GameSceneController : MonoBehaviour
 
     private GameObject currentRoot;
 
-    void Start()
-    {
-        //ResetCardGameRoot(); 我在开始按钮点击时也会重置，所以这里不需要了
-    }
+    // void Start()
+    // {
+    //     ResetCardGameRoot(); 我在开始按钮点击时也会重置，所以这里不需要了
+    // }
 
     public void ResetCardGameRoot()
     {
@@ -20,7 +20,7 @@ public class GameSceneController : MonoBehaviour
         // 关键的变成：指定父物体
         currentRoot = Instantiate(cardGameRootPrefab, canvasParent, false);
 
-        int resultPanelIdx = canvasParent.childCount - 1; // resultPanel在最底部（最后一个）
-        currentRoot.transform.SetSiblingIndex(resultPanelIdx - 1);
+        int resultPanelIdx = canvasParent.childCount - 2; // resultPanel和SettingsPanel在最底部
+        currentRoot.transform.SetSiblingIndex(resultPanelIdx - 2);
     }
 }
